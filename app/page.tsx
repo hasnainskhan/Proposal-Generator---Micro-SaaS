@@ -98,17 +98,17 @@ Your Team`
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Form */}
           <div className="space-y-6">
             <Card>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                <h2 className="text-2xl font-semibold text-white mb-2">
                   Project Details
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-gray-300">
                   Fill in the details below to generate your proposal
                 </p>
               </div>
@@ -177,7 +177,7 @@ Your Team`
                 </Button>
 
                 {error && (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                  <div className="p-4 bg-red-900/20 border border-red-700 rounded-lg text-red-400">
                     {error}
                   </div>
                 )}
@@ -190,10 +190,10 @@ Your Team`
             <Card>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                  <h2 className="text-2xl font-semibold text-white mb-2">
                     Generated Proposal
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-300">
                     Your AI-generated proposal will appear here
                   </p>
                 </div>
@@ -220,18 +220,18 @@ Your Team`
               {isGenerating ? (
                 <div className="flex flex-col items-center justify-center py-16">
                   <Spinner size="lg" />
-                  <p className="mt-4 text-gray-600">AI is crafting your proposal...</p>
+                  <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
                 </div>
               ) : generatedProposal ? (
-                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                  <pre className="whitespace-pre-wrap font-sans text-sm text-gray-800 leading-relaxed">
+                <div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                  <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
                     {generatedProposal}
                   </pre>
                 </div>
               ) : (
-                <div className="bg-gray-50 rounded-lg p-12 border-2 border-dashed border-gray-300 text-center">
+                <div className="bg-gray-900 rounded-lg p-12 border-2 border-dashed border-gray-700 text-center">
                   <div className="text-6xl mb-4">📄</div>
-                  <p className="text-gray-500 text-lg">
+                  <p className="text-gray-400 text-lg">
                     Fill in the form and click "Generate AI Proposal" to create your proposal
                   </p>
                 </div>
@@ -241,8 +241,8 @@ Your Team`
         </div>
 
         {/* Footer */}
-        <div className="mt-12 text-center text-gray-500 text-sm">
-          <p>Built with Next.js • AI Proposal Writer MVP</p>
+        <div className="mt-12 text-center text-gray-400 text-sm">
+          <p>Developed by Hasnain Babar</p>
         </div>
       </div>
     </main>
