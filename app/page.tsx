@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/Card'
 import { Spinner } from '@/components/ui/Spinner'
 import { TagsInput } from '@/components/ui/TagsInput'
 import { Select } from '@/components/ui/Select'
+import { CustomScrollbar } from '@/components/ui/CustomScrollbar'
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -59,21 +60,17 @@ I understand the challenges you're facing with this project, and I'm confident I
 Recent Projects:
 
 Project 1 – [Link]
-
 Project 2 – [Link]
-
 Project 3 – [Link]
 
 Portfolio:
 
 Portfolio 1 – [Link]
-
 Portfolio 2 – [Link]
 
 Estimated Budget:
 
 Hourly: $10/hr
-
 Fixed: ${budget}
 
 Timeline:
@@ -107,10 +104,10 @@ ${yourName}`
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Form */}
-          <div className="space-y-6 flex flex-col">
-            <Card className="flex flex-col h-full">
+          <div className="space-y-6">
+            <Card>
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-white mb-2">
                   Project Details
@@ -211,9 +208,9 @@ ${yourName}`
           </div>
 
           {/* Generated Proposal */}
-          <div className="space-y-6 flex flex-col">
-            <Card className="flex flex-col h-full">
-              <div className="flex items-center justify-between mb-6 flex-shrink-0">
+          <div className="space-y-6">
+            <Card>
+              <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-semibold text-white mb-2">
                     Generated Proposal
@@ -242,21 +239,26 @@ ${yourName}`
                 )}
               </div>
 
-              <div className="flex-1 overflow-hidden">
-                {isGenerating ? (
-                  <div className="flex flex-col items-center justify-center py-16">
-                    <Spinner size="lg" />
-                    <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
-                  </div>
-                ) : generatedProposal ? (
-                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 h-full overflow-y-auto">
-                    <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
-                      {generatedProposal}
-                    </pre>
-                  </div>
-                ) : (
-                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 h-full overflow-y-auto">
-                    <pre className="whitespace-pre-wrap font-sans text-sm text-gray-400 leading-relaxed">
+              {isGenerating ? (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <Spinner size="lg" />
+                  <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
+                </div>
+              ) : generatedProposal ? (
+                <div className="bg-gray-900 rounded-lg border border-gray-700 relative" style={{ height: '600px' }}>
+                  <CustomScrollbar style={{ height: '100%' }}>
+                    <div className="p-6">
+                      <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
+                        {generatedProposal}
+                      </pre>
+                    </div>
+                  </CustomScrollbar>
+                </div>
+              ) : (
+                <div className="bg-gray-900 rounded-lg border border-gray-700 relative" style={{ height: '600px' }}>
+                  <CustomScrollbar style={{ height: '100%' }}>
+                    <div className="p-6">
+                      <pre className="whitespace-pre-wrap font-sans text-sm text-gray-400 leading-relaxed">
 {`Hi Client Name,
 
 I understand the challenges you're facing with this project, and I'm confident I can provide a reliable and efficient solution tailored to your requirements. With my experience in full-stack development, I focus on delivering scalable, high-quality results that solve problems
@@ -281,10 +283,11 @@ I would be happy to discuss your goals in more detail and outline the best appro
 
 Best regards,
 Your Name`}
-                    </pre>
-                  </div>
-                )}
-              </div>
+                      </pre>
+                    </div>
+                  </CustomScrollbar>
+                </div>
+              )}
             </Card>
           </div>
         </div>
