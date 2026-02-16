@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { TextArea } from '@/components/ui/TextArea'
@@ -24,6 +24,32 @@ export default function Home() {
   const [generatedProposal, setGeneratedProposal] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState('')
+  const leftCardRef = useRef<HTMLDivElement>(null)
+  const rightCardRef = useRef<HTMLDivElement>(null)
+  const [rightCardHeight, setRightCardHeight] = useState<number | null>(null)
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (leftCardRef.current && rightCardRef.current) {
+        const leftHeight = leftCardRef.current.offsetHeight
+        setRightCardHeight(leftHeight)
+      }
+    }
+
+    updateHeight()
+    window.addEventListener('resize', updateHeight)
+    
+    // Use MutationObserver to watch for content changes
+    const observer = new MutationObserver(updateHeight)
+    if (leftCardRef.current) {
+      observer.observe(leftCardRef.current, { childList: true, subtree: true, attributes: true })
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateHeight)
+      observer.disconnect()
+    }
+  }, [formData, generatedProposal, isGenerating])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -107,7 +133,7 @@ ${yourName}`
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Form */}
           <div className="space-y-6">
-            <Card>
+            <Card ref={leftCardRef}>
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-white mb-2">
                   Project Details
@@ -209,8 +235,8 @@ ${yourName}`
 
           {/* Generated Proposal */}
           <div className="space-y-6">
-            <Card>
-              <div className="flex items-center justify-between mb-6">
+            <Card ref={rightCardRef} className="flex flex-col" style={rightCardHeight ? { height: `${rightCardHeight}px` } : {}}>
+              <div className="flex items-center justify-between mb-6 flex-shrink-0">
                 <div>
                   <h2 className="text-2xl font-semibold text-white mb-2">
                     Generated Proposal
@@ -239,26 +265,27 @@ ${yourName}`
                 )}
               </div>
 
-              {isGenerating ? (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <Spinner size="lg" />
-                  <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
-                </div>
-              ) : generatedProposal ? (
-                <div className="bg-gray-900 rounded-lg border border-gray-700 relative" style={{ height: '600px' }}>
-                  <CustomScrollbar style={{ height: '100%' }}>
-                    <div className="p-6">
-                      <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
-                        {generatedProposal}
-                      </pre>
-                    </div>
-                  </CustomScrollbar>
-                </div>
-              ) : (
-                <div className="bg-gray-900 rounded-lg border border-gray-700 relative" style={{ height: '600px' }}>
-                  <CustomScrollbar style={{ height: '100%' }}>
-                    <div className="p-6">
-                      <pre className="whitespace-pre-wrap font-sans text-sm text-gray-400 leading-relaxed">
+              <div className="flex-1 min-h-0">
+                {isGenerating ? (
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <Spinner size="lg" />
+                    <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
+                  </div>
+                ) : generatedProposal ? (
+                  <div className="bg-gray-900 rounded-lg border border-gray-700 relative h-full">
+                    <CustomScrollbar style={{ height: '100%' }}>
+                      <div className="p-6">
+                        <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
+                          {generatedProposal}
+                        </pre>
+                      </div>
+                    </CustomScrollbar>
+                  </div>
+                ) : (
+                  <div className="bg-gray-900 rounded-lg border border-gray-700 relative h-full">
+                    <CustomScrollbar style={{ height: '100%' }}>
+                      <div className="p-6">
+                        <pre className="whitespace-pre-wrap font-sans text-sm text-gray-400 leading-relaxed">
 {`Hi Client Name,
 
 I understand the challenges you're facing with this project, and I'm confident I can provide a reliable and efficient solution tailored to your requirements. With my experience in full-stack development, I focus on delivering scalable, high-quality results that solve problems
@@ -283,11 +310,12 @@ I would be happy to discuss your goals in more detail and outline the best appro
 
 Best regards,
 Your Name`}
-                      </pre>
-                    </div>
-                  </CustomScrollbar>
-                </div>
-              )}
+                        </pre>
+                      </div>
+                    </CustomScrollbar>
+                  </div>
+                )}
+              </div>
             </Card>
           </div>
         </div>
