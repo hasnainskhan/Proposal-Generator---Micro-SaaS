@@ -6,11 +6,14 @@ import { Input } from '@/components/ui/Input'
 import { TextArea } from '@/components/ui/TextArea'
 import { Card } from '@/components/ui/Card'
 import { Spinner } from '@/components/ui/Spinner'
+import { TagsInput } from '@/components/ui/TagsInput'
+import { Select } from '@/components/ui/Select'
 
 export default function Home() {
   const [formData, setFormData] = useState({
     clientName: '',
-    projectTitle: '',
+    name: '',
+    skills: [] as string[],
     projectDescription: '',
     budget: '',
     timeline: '',
@@ -21,7 +24,7 @@ export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState('')
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -43,41 +46,45 @@ export default function Home() {
   }
 
   const generateMockProposal = (data: typeof formData) => {
-    return `PROPOSAL FOR ${data.clientName.toUpperCase() || 'CLIENT'}
+    const skillsText = data.skills.length > 0 ? data.skills.join(', ') : 'full-stack development'
+    const clientName = data.clientName || 'Client Name'
+    const yourName = data.name || 'Your Name'
+    const budget = data.budget || '$3000'
+    const timeline = data.timeline || 'To be discussed'
+    
+    return `Hi ${clientName},
 
-Project Title: ${data.projectTitle || 'Untitled Project'}
+I understand the challenges you're facing with this project, and I'm confident I can provide a reliable and efficient solution tailored to your requirements. With my experience in ${skillsText}, I focus on delivering scalable, high-quality results that solve problems
 
-EXECUTIVE SUMMARY
+Recent Projects:
 
-This proposal outlines our approach to deliver ${data.projectTitle || 'your project'} for ${data.clientName || 'your organization'}. We are committed to providing exceptional value and ensuring project success through our proven methodology and expertise.
+Project 1 – [Link]
 
-PROJECT OVERVIEW
+Project 2 – [Link]
 
-${data.projectDescription || 'Project description will be detailed here based on your requirements.'}
+Project 3 – [Link]
 
-SCOPE OF WORK
+Portfolio:
 
-Our comprehensive approach includes:
-${data.deliverables || '• Detailed deliverables will be specified based on project requirements'}
+Portfolio 1 – [Link]
 
-TIMELINE
+Portfolio 2 – [Link]
 
-${data.timeline || 'Project timeline will be determined based on scope and requirements'}
+Estimated Budget:
 
-INVESTMENT
+Hourly: $10/hr
 
-${data.budget ? `Total Investment: ${data.budget}` : 'Investment details will be provided based on project scope'}
+Fixed: ${budget}
 
-NEXT STEPS
+Timeline:
 
-1. Review and approval of this proposal
-2. Contract signing and project kickoff
-3. Regular progress updates and milestone reviews
+${timeline}
 
-We look forward to partnering with you on this exciting project.
+I would be happy to discuss your goals in more detail and outline the best approach to achieve them. Thank you for your time and consideration.
 
 Best regards,
-Your Team`
+
+${yourName}`
   }
 
   const handleCopyProposal = () => {
@@ -100,10 +107,10 @@ Your Team`
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Input Form */}
-          <div className="space-y-6">
-            <Card>
+          <div className="space-y-6 flex flex-col">
+            <Card className="flex flex-col h-full">
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-white mb-2">
                   Project Details
@@ -114,20 +121,29 @@ Your Team`
               </div>
 
               <div className="space-y-4">
-                <Input
-                  label="Client Name"
-                  name="clientName"
-                  value={formData.clientName}
-                  onChange={handleInputChange}
-                  placeholder="Enter client or company name"
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <Input
+                    label="Client Name"
+                    name="clientName"
+                    value={formData.clientName}
+                    onChange={handleInputChange}
+                    placeholder="Enter client or company name"
+                  />
 
-                <Input
-                  label="Project Title"
-                  name="projectTitle"
-                  value={formData.projectTitle}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Website Redesign Project"
+                  <Input
+                    label="Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter your name"
+                  />
+                </div>
+
+                <TagsInput
+                  label="Skills"
+                  tags={formData.skills}
+                  onChange={(tags) => setFormData(prev => ({ ...prev, skills: tags }))}
+                  placeholder="Type skill and press Enter"
                 />
 
                 <TextArea
@@ -148,12 +164,21 @@ Your Team`
                     placeholder="e.g., $10,000"
                   />
 
-                  <Input
+                  <Select
                     label="Timeline"
                     name="timeline"
                     value={formData.timeline}
                     onChange={handleInputChange}
-                    placeholder="e.g., 3 months"
+                    options={[
+                      { value: '', label: 'Select timeline' },
+                      { value: 'less than 1 week', label: 'Less than 1 week' },
+                      { value: 'less than 2 weeks', label: 'Less than 2 weeks' },
+                      { value: '1 to 2 weeks', label: '1 to 2 weeks' },
+                      { value: 'less than 1 month', label: 'Less than 1 month' },
+                      { value: '1 to 3 months', label: '1 to 3 months' },
+                      { value: '3 to 6 months', label: '3 to 6 months' },
+                      { value: 'more than 6 months', label: 'More than 6 months' }
+                    ]}
                   />
                 </div>
 
@@ -186,9 +211,9 @@ Your Team`
           </div>
 
           {/* Generated Proposal */}
-          <div className="space-y-6">
-            <Card>
-              <div className="flex items-center justify-between mb-6">
+          <div className="space-y-6 flex flex-col">
+            <Card className="flex flex-col h-full">
+              <div className="flex items-center justify-between mb-6 flex-shrink-0">
                 <div>
                   <h2 className="text-2xl font-semibold text-white mb-2">
                     Generated Proposal
@@ -217,25 +242,49 @@ Your Team`
                 )}
               </div>
 
-              {isGenerating ? (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <Spinner size="lg" />
-                  <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
-                </div>
-              ) : generatedProposal ? (
-                <div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
-                  <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
-                    {generatedProposal}
-                  </pre>
-                </div>
-              ) : (
-                <div className="bg-gray-900 rounded-lg p-12 border-2 border-dashed border-gray-700 text-center">
-                  <div className="text-6xl mb-4">📄</div>
-                  <p className="text-gray-400 text-lg">
-                    Fill in the form and click "Generate AI Proposal" to create your proposal
-                  </p>
-                </div>
-              )}
+              <div className="flex-1 overflow-hidden">
+                {isGenerating ? (
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <Spinner size="lg" />
+                    <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
+                  </div>
+                ) : generatedProposal ? (
+                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 h-full overflow-y-auto">
+                    <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
+                      {generatedProposal}
+                    </pre>
+                  </div>
+                ) : (
+                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 h-full overflow-y-auto">
+                    <pre className="whitespace-pre-wrap font-sans text-sm text-gray-400 leading-relaxed">
+{`Hi Client Name,
+
+I understand the challenges you're facing with this project, and I'm confident I can provide a reliable and efficient solution tailored to your requirements. With my experience in full-stack development, I focus on delivering scalable, high-quality results that solve problems
+
+Recent Projects:
+Project 1 – [Link]
+Project 2 – [Link]
+Project 3 – [Link]
+
+Portfolio:
+Portfolio 1 – [Link]
+Portfolio 2 – [Link]
+
+Estimated Budget:
+Hourly: $10/hr
+Fixed: $3000
+
+Timeline:
+[Timeline]
+
+I would be happy to discuss your goals in more detail and outline the best approach to achieve them. Thank you for your time and consideration.
+
+Best regards,
+Your Name`}
+                    </pre>
+                  </div>
+                )}
+              </div>
             </Card>
           </div>
         </div>
