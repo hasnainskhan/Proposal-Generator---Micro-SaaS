@@ -27,6 +27,7 @@ export default function Home() {
   const leftCardRef = useRef<HTMLDivElement>(null)
   const rightCardRef = useRef<HTMLDivElement>(null)
   const [rightCardHeight, setRightCardHeight] = useState<number | null>(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     const updateHeight = () => {
@@ -112,19 +113,8 @@ ${yourName}`
 
   const handleCopyProposal = () => {
     navigator.clipboard.writeText(generatedProposal)
-    alert('Proposal copied to clipboard!')
-  }
-
-  const handleDownloadProposal = () => {
-    const blob = new Blob([generatedProposal], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `proposal-${formData.clientName || 'client'}-${Date.now()}.txt`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
@@ -247,22 +237,13 @@ ${yourName}`
                   </p>
                 </div>
                 {generatedProposal && (
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleCopyProposal}
-                    >
-                      📋 Copy
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleDownloadProposal}
-                    >
-                      💾 Download
-                    </Button>
-                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopyProposal}
+                  >
+                    {copied ? 'Copied' : 'Copy'}
+                  </Button>
                 )}
               </div>
 
