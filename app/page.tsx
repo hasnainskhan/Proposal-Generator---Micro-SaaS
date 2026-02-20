@@ -128,8 +128,9 @@ ${yourName}`
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent" aria-hidden />
+      <div className="container relative mx-auto px-4 py-8 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Form */}
           <div className="space-y-6">
@@ -221,7 +222,7 @@ ${yourName}`
                   className="w-full"
                   size="lg"
                 >
-                  {isGenerating ? 'Generating Proposal...' : '✨ Generate AI Proposal'}
+                  {isGenerating ? 'Generating Proposal...' : 'Generate AI Proposal'}
                 </Button>
 
                 {error && (
@@ -272,7 +273,7 @@ ${yourName}`
                     <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
                   </div>
                 ) : generatedProposal ? (
-                  <div className="bg-gray-900 rounded-lg border border-gray-700 relative h-full">
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full">
                     <CustomScrollbar style={{ height: '100%' }}>
                       <div className="p-6">
                         <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
@@ -282,7 +283,7 @@ ${yourName}`
                     </CustomScrollbar>
                   </div>
                 ) : (
-                  <div className="bg-gray-900 rounded-lg border border-gray-700 relative h-full">
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full">
                     <CustomScrollbar style={{ height: '100%' }}>
                       <div className="p-6">
                         <pre className="whitespace-pre-wrap font-sans text-sm text-gray-400 leading-relaxed">
