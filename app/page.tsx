@@ -248,13 +248,13 @@ ${yourName}`
               </div>
 
               <div className="flex-1 min-h-0">
-                {isGenerating ? (
-                  <div className="flex flex-col items-center justify-center py-16">
-                    <Spinner size="lg" />
-                    <p className="mt-4 text-gray-300">AI is crafting your proposal...</p>
-                  </div>
-                ) : generatedProposal ? (
-                  <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full">
+                <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full min-h-[400px]">
+                  {isGenerating ? (
+                    <div className="h-full flex flex-col items-center justify-center py-16">
+                      <Spinner size="lg" />
+                      <p className="mt-4 text-gray-300">Generating proposal</p>
+                    </div>
+                  ) : generatedProposal ? (
                     <CustomScrollbar style={{ height: '100%' }}>
                       <div className="p-6">
                         <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
@@ -262,12 +262,12 @@ ${yourName}`
                         </pre>
                       </div>
                     </CustomScrollbar>
-                  </div>
-                ) : (
-                  <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full flex items-center justify-center min-h-[400px]">
-                    <p className="text-gray-400 text-lg">Your proposal here</p>
-                  </div>
-                )}
+                  ) : (
+                    <div className="h-full flex items-center justify-center">
+                      <p className="text-gray-400 text-lg">Your proposal here</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </Card>
           </div>
