@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { TextArea } from '@/components/ui/TextArea'
@@ -24,33 +24,7 @@ export default function Home() {
   const [generatedProposal, setGeneratedProposal] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState('')
-  const leftCardRef = useRef<HTMLDivElement>(null)
-  const rightCardRef = useRef<HTMLDivElement>(null)
-  const [rightCardHeight, setRightCardHeight] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    const updateHeight = () => {
-      if (leftCardRef.current && rightCardRef.current) {
-        const leftHeight = leftCardRef.current.offsetHeight
-        setRightCardHeight(leftHeight)
-      }
-    }
-
-    updateHeight()
-    window.addEventListener('resize', updateHeight)
-    
-    // Use MutationObserver to watch for content changes
-    const observer = new MutationObserver(updateHeight)
-    if (leftCardRef.current) {
-      observer.observe(leftCardRef.current, { childList: true, subtree: true, attributes: true })
-    }
-
-    return () => {
-      window.removeEventListener('resize', updateHeight)
-      observer.disconnect()
-    }
-  }, [formData, generatedProposal, isGenerating])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -120,11 +94,16 @@ ${yourName}`
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent" aria-hidden />
+      <header className="relative border-b border-white/10 bg-white/5 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 max-w-7xl">
+          <h1 className="text-xl font-semibold text-white">Proposal Writer</h1>
+        </div>
+      </header>
       <div className="container relative mx-auto px-4 py-8 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Form */}
           <div className="space-y-6">
-            <Card ref={leftCardRef}>
+            <Card>
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-white mb-2">
                   Project Details
@@ -226,8 +205,8 @@ ${yourName}`
 
           {/* Generated Proposal */}
           <div className="space-y-6">
-            <Card ref={rightCardRef} className="flex flex-col" style={rightCardHeight ? { height: `${rightCardHeight}px` } : {}}>
-              <div className="flex items-center justify-between mb-6 flex-shrink-0">
+            <Card>
+              <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-semibold text-white mb-2">
                     Generated Proposal
@@ -247,27 +226,25 @@ ${yourName}`
                 )}
               </div>
 
-              <div className="flex-1 min-h-0">
-                <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full min-h-[400px]">
-                  {isGenerating ? (
-                    <div className="h-full flex flex-col items-center justify-center py-16">
-                      <Spinner size="lg" />
-                      <p className="mt-4 text-gray-300">Generating proposal</p>
+              <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-[600px]">
+                {isGenerating ? (
+                  <div className="h-full flex flex-col items-center justify-center py-16">
+                    <Spinner size="lg" />
+                    <p className="mt-4 text-gray-300">Generating proposal</p>
+                  </div>
+                ) : generatedProposal ? (
+                  <CustomScrollbar className="h-full" style={{ height: '100%' }}>
+                    <div className="p-6">
+                      <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
+                        {generatedProposal}
+                      </pre>
                     </div>
-                  ) : generatedProposal ? (
-                    <CustomScrollbar style={{ height: '100%' }}>
-                      <div className="p-6">
-                        <pre className="whitespace-pre-wrap font-sans text-sm text-gray-200 leading-relaxed">
-                          {generatedProposal}
-                        </pre>
-                      </div>
-                    </CustomScrollbar>
-                  ) : (
-                    <div className="h-full flex items-center justify-center">
-                      <p className="text-gray-400 text-lg">Your proposal here</p>
-                    </div>
-                  )}
-                </div>
+                  </CustomScrollbar>
+                ) : (
+                  <div className="h-full flex items-center justify-center">
+                    <p className="text-gray-400 text-lg">Your proposal here</p>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
