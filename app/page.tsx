@@ -264,37 +264,8 @@ ${yourName}`
                     </CustomScrollbar>
                   </div>
                 ) : (
-                  <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full">
-                    <CustomScrollbar style={{ height: '100%' }}>
-                      <div className="p-6">
-                        <pre className="whitespace-pre-wrap font-sans text-sm text-gray-400 leading-relaxed">
-{`Hi Client Name,
-
-I understand the challenges you're facing with this project, and I'm confident I can provide a reliable and efficient solution tailored to your requirements. With my experience in full-stack development, I focus on delivering scalable, high-quality results that solve problems
-
-Recent Projects:
-Project 1 – [Link]
-Project 2 – [Link]
-Project 3 – [Link]
-
-Portfolio:
-Portfolio 1 – [Link]
-Portfolio 2 – [Link]
-
-Estimated Budget:
-Hourly: $10/hr
-Fixed: $3000
-
-Timeline:
-[Timeline]
-
-I would be happy to discuss your goals in more detail and outline the best approach to achieve them. Thank you for your time and consideration.
-
-Best regards,
-Your Name`}
-                        </pre>
-                      </div>
-                    </CustomScrollbar>
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 relative h-full flex items-center justify-center min-h-[400px]">
+                    <p className="text-gray-400 text-lg">Your proposal here</p>
                   </div>
                 )}
               </div>
