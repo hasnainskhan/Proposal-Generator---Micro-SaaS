@@ -95,7 +95,7 @@ ${yourName}`
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent" aria-hidden />
       <header className="relative border-b border-white/10 bg-white/5 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 max-w-7xl">
+        <div className="container mx-auto px-4 py-4 max-w-7xl flex justify-center">
           <h1 className="text-xl font-semibold text-white">Proposal Writer</h1>
         </div>
       </header>
